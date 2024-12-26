@@ -1,10 +1,16 @@
 import { IconSymbolName } from "@/components/ui/IconSymbol";
 
-type ActivityType = "Cycling" | "Running" | "Yoga" | "Surfing" | "Social";
+type ActivityType =
+  | "Cycling"
+  | "Running"
+  | "Swimming"
+  | "Yoga"
+  | "Surfing"
+  | "Social";
 
 interface OrganizerType {
   name: string;
-  avatar: any;
+  avatar?: any;
 }
 
 export interface EventType {
@@ -20,12 +26,13 @@ export interface EventType {
   avgAge: number;
   activityDetails: {
     type: ActivityType;
-    terrain?: "Road" | "Gravel";
+    terrain?: string;
     distance?: number;
     elevation?: number;
-    icon: IconSymbolName;
+    icon: string;
+    difficulty: "Beginner" | "Intermediate" | "Advanced";
   };
-  coverImage: any;
+  coverImage?: any;
   organizer: OrganizerType;
   tags: string[];
 }
@@ -38,7 +45,7 @@ export const AllEvents: EventType[] = [
       name: "Team Best Cycling Club",
     },
     title: "Thunder Thursday",
-    date: "12-28-2024",
+    date: "2024-12-26T17:15",
     time: "05:15 PM",
     location: "Best Pizza & Brew",
     avgAge: 28,
@@ -48,6 +55,7 @@ export const AllEvents: EventType[] = [
       distance: 27,
       elevation: 1790,
       icon: "bicycle",
+      difficulty: "Advanced",
     },
     coverImage: require("@/assets/images/best.png"),
     organizer: {
@@ -63,7 +71,7 @@ export const AllEvents: EventType[] = [
       name: "Team Best Cycling Club",
     },
     title: "Rancho Santa Fe Spin",
-    date: "12-30-2024",
+    date: "2024-12-27T06:30:00",
     time: "06:30 AM",
     location: "Cadence Cyclery",
     avgAge: 28,
@@ -73,6 +81,7 @@ export const AllEvents: EventType[] = [
       distance: 40,
       elevation: 2303,
       icon: "bicycle",
+      difficulty: "Intermediate",
     },
     coverImage: require("@/assets/images/best.png"),
     organizer: {
@@ -88,7 +97,7 @@ export const AllEvents: EventType[] = [
       name: "Team Best Cycling Club",
     },
     title: "Hay In The Barn",
-    date: "12-31-2024",
+    date: "2024-12-31T06:00:00",
     time: "06:00 AM",
     location: "Jamul Petco",
     avgAge: 28,
@@ -98,6 +107,7 @@ export const AllEvents: EventType[] = [
       distance: 101,
       elevation: 7900,
       icon: "bicycle",
+      difficulty: "Advanced",
     },
     coverImage: require("@/assets/images/tadej5.jpg"),
     organizer: {
@@ -113,7 +123,7 @@ export const AllEvents: EventType[] = [
       name: "Coastal Run Club",
     },
     title: "Holiday 5K",
-    date: "12-27-2024",
+    date: "2024-12-27T09:00:00",
     time: "09:00 AM",
     location: "Lofty Coffee",
     avgAge: 25,
@@ -121,7 +131,8 @@ export const AllEvents: EventType[] = [
       type: "Running",
       terrain: "Road",
       distance: 7,
-      icon: "figure.roll.runningpace",
+      icon: "running",
+      difficulty: "Beginner",
     },
     coverImage: require("@/assets/images/crc.png"),
     organizer: {
@@ -129,5 +140,28 @@ export const AllEvents: EventType[] = [
       avatar: require("@/assets/images/tadej-headshot.png"),
     },
     tags: ["C", "RUN", "7 MI"],
+  },
+  {
+    id: "8",
+    clubDetails: {
+      id: "741",
+      name: "La Jolla Swim Club",
+    },
+    title: "Morning Swim",
+    date: "2024-12-29T06:00:00",
+    time: "06:00 AM",
+    location: "Lakeside Park",
+    avgAge: 27,
+    activityDetails: {
+      type: "Swimming",
+      terrain: "Water",
+      distance: 12,
+      icon: "swimmer",
+      difficulty: "Advanced",
+    },
+    organizer: {
+      name: "Anna White",
+    },
+    tags: ["A", "TRI", "12 MI"],
   },
 ];

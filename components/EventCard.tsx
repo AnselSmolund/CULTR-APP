@@ -1,4 +1,6 @@
 import { EventType } from "@/constants/Data";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { formatDate } from "date-fns";
 import {
   StyleSheet,
   View,
@@ -8,7 +10,6 @@ import {
   Button,
 } from "react-native";
 import { useEventContext } from "./EventContext";
-import { IconSymbol } from "./ui/IconSymbol";
 
 export const EventCard: React.FC<{
   event: EventType;
@@ -61,47 +62,53 @@ export const EventCard2: React.FC<{
 }> = ({ event, alreadyJoined }) => {
   const { joinEvent, removeEvent } = useEventContext();
 
+  const difficultyStyle = {
+    ["Beginner"]: styles2.beginnerLabel,
+    ["Intermediate"]: styles2.intermediateLabel,
+    ["Advanced"]: styles2.advancedLabel,
+  };
+
+  const eventDate = new Date(event.date);
+
   return (
-    <View style={styles.card}>
-      <View style={styles.cardContent}>
-        <View style={{ display: "flex", flexDirection: "row" }}>
-          <View style={{ display: "flex", flexDirection: "column" }}>
-            <IconSymbol name={event.activityDetails.icon} color="#505168" />
-            <TouchableOpacity style={styles.tag}>
-              <Text style={styles.tagText}>{event.tags[0]}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.tag}>
-              <Text style={styles.tagText}>{event.avgAge}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ display: "flex", flexDirection: "column" }}>
-            <Text style={styles.title}>{event.clubDetails.name}</Text>
-            <Text style={styles.title}>{event.title}</Text>
-            <Text style={styles.location}>{event.location}</Text>
-            <Text style={styles.dateTime}>
-              {event.date} • {event.time}
-            </Text>
-          </View>
-          <TouchableOpacity
-            onPress={() =>
-              alreadyJoined ? removeEvent(event.id) : joinEvent(event)
-            }
-          >
-            {alreadyJoined ? (
-              <IconSymbol name="bookmark.fill" color="#505168" />
-            ) : (
-              <IconSymbol name="bookmark" color="#505168" />
-            )}
-          </TouchableOpacity>
+    <View style={styles2.card}>
+      <View style={styles2.leftSection}>
+        <FontAwesome5
+          name={event.activityDetails.icon}
+          size={24}
+          color="#333"
+        />
+        <View style={styles2.labels}>
+          <Text style={difficultyStyle[event.activityDetails.difficulty]}>
+            {event.activityDetails.difficulty}
+          </Text>
+          <Text
+            style={styles2.averageAgeLabel}
+          >{`AVG AGE ${event.avgAge}`}</Text>
         </View>
-        {/* Tags */}
-        <View style={styles.tagsContainer}>
-          {event.tags.map((tag: any, index: number) => (
-            <TouchableOpacity key={index} style={styles.tag}>
-              <Text style={styles.tagText}>{tag}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+      </View>
+
+      <View style={styles2.detailsSection}>
+        <Text style={styles2.title}>{event.clubDetails.name}</Text>
+        <Text style={styles2.subtitle}>{event.title}</Text>
+        <Text style={styles2.location}>📍 {event.location}</Text>
+        <Text style={styles2.dateTime}>
+          {formatDate(eventDate, "ccc MM/d p")}
+        </Text>
+      </View>
+
+      <View style={styles2.rightSection}>
+        <TouchableOpacity
+          onPress={() =>
+            alreadyJoined ? removeEvent(event.id) : joinEvent(event)
+          }
+        >
+          {alreadyJoined ? (
+            <FontAwesome name={"bookmark"} size={24} color="#333" />
+          ) : (
+            <FontAwesome name={"bookmark-o"} size={24} color="#333" />
+          )}
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -218,5 +225,106 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
     color: "#FFF", // Black text
+  },
+});
+
+const styles2 = StyleSheet.create({
+  card: {
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 15,
+    justifyContent: "space-between",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    width: "100%",
+  },
+  leftSection: {
+    marginRight: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 3,
+  },
+  detailsSection: {
+    flex: 1,
+    marginRight: 5,
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  title: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#333",
+    marginRight: 3,
+  },
+  subtitle: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#000",
+    marginBottom: 5,
+  },
+  location: {
+    fontSize: 12,
+    color: "#000",
+    marginBottom: 2,
+  },
+  dateTime: {
+    fontSize: 12,
+    color: "#000",
+  },
+  rightSection: {
+    marginTop: 4,
+  },
+  labels: {
+    marginBottom: 10,
+  },
+  advancedLabel: {
+    backgroundColor: "#F59A23",
+    color: "#000",
+    fontSize: 10,
+    fontWeight: "bold",
+    borderRadius: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    textAlign: "center",
+    marginBottom: 5,
+  },
+  intermediateLabel: {
+    backgroundColor: "#FFD700",
+    color: "#000",
+    fontSize: 10,
+    fontWeight: "bold",
+    borderRadius: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    textAlign: "center",
+    marginBottom: 5,
+  },
+  beginnerLabel: {
+    backgroundColor: "#7FC636",
+    color: "#000",
+    fontSize: 10,
+    fontWeight: "bold",
+    borderRadius: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    textAlign: "center",
+    marginBottom: 5,
+  },
+  averageAgeLabel: {
+    backgroundColor: "#D3D3D3",
+    color: "#333",
+    fontSize: 10,
+    fontWeight: "bold",
+    borderRadius: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    textAlign: "center",
   },
 });

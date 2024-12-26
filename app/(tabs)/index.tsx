@@ -1,4 +1,4 @@
-import { EventCard } from "@/components/EventCard";
+import { EventCard, EventCard2 } from "@/components/EventCard";
 import { useEventContext } from "@/components/EventContext";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
@@ -26,7 +26,7 @@ export default function HomeScreen() {
 
       <ThemedView>
         {joinedEvents.map((event, i) => {
-          return <EventCard event={event} key={i} alreadyJoined={true} />;
+          return <EventCard2 event={event} key={i} alreadyJoined={true} />;
         })}
       </ThemedView>
     </ParallaxScrollView>
