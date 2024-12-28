@@ -1,27 +1,19 @@
-import {
-  StyleSheet,
-  Image,
-  Platform,
-  View,
-  FlatList,
-  Text,
-} from "react-native";
+import { StyleSheet, Image, View } from "react-native";
 
-import { Collapsible } from "@/components/Collapsible";
-import { ExternalLink } from "@/components/ExternalLink";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { IconSymbol } from "@/components/ui/IconSymbol";
-import { EventCard, EventCard2 } from "@/components/EventCard";
+import { EventCard } from "@/components/EventCard";
 import { AllEvents, EventType } from "@/constants/Data";
 import { useEventContext } from "@/components/EventContext";
-import { isToday, isTomorrow } from "date-fns";
+import { isPast, isToday, isTomorrow } from "date-fns";
+import { useRouter } from "expo-router";
 
 export default function ExploreScreen() {
   const { joinedEvents } = useEventContext();
 
-  const { Today, Tomorrow, Upcoming } = groupActivitiesByDate(AllEvents);
+  const { Today, Tomorrow, Upcoming, Past } = groupActivitiesByDate(AllEvents);
+  const router = useRouter();
 
   return (
     <ParallaxScrollView
@@ -48,20 +40,31 @@ export default function ExploreScreen() {
           gap: 10,
         }}
       >
-        <ThemedText type="subtitle">Today</ThemedText>
-        {Today.map((event, i) => {
+        <ThemedText type="subtitle">Past</ThemedText>
+        {Past.map((event, i) => {
           return (
-            <EventCard2
+            <EventCard
               event={event}
               key={i}
               alreadyJoined={joinedEvents.includes(event)}
             />
           );
         })}
+        <ThemedText type="subtitle">Today</ThemedText>
+        {Today.map((event, i) => {
+          return (
+            <EventCard
+              event={event}
+              key={i}
+              alreadyJoined={joinedEvents.includes(event)}
+            />
+          );
+        })}
+
         <ThemedText type="subtitle">Tomorrow</ThemedText>
         {Tomorrow.map((event, i) => {
           return (
-            <EventCard2
+            <EventCard
               event={event}
               key={i}
               alreadyJoined={joinedEvents.includes(event)}
@@ -71,7 +74,7 @@ export default function ExploreScreen() {
         <ThemedText type="subtitle">Upcoming</ThemedText>
         {Upcoming.map((event, i) => {
           return (
-            <EventCard2
+            <EventCard
               event={event}
               key={i}
               alreadyJoined={joinedEvents.includes(event)}
@@ -85,10 +88,12 @@ export default function ExploreScreen() {
 
 const groupActivitiesByDate = (activities: EventType[]) => {
   const grouped: {
+    Past: EventType[];
     Today: EventType[];
     Tomorrow: EventType[];
     Upcoming: EventType[];
   } = {
+    Past: [],
     Today: [],
     Tomorrow: [],
     Upcoming: [],
@@ -101,6 +106,8 @@ const groupActivitiesByDate = (activities: EventType[]) => {
       grouped.Today.push(activity);
     } else if (isTomorrow(activityDate)) {
       grouped.Tomorrow.push(activity);
+    } else if (isPast(activityDate)) {
+      grouped.Past.push(activity);
     } else {
       grouped.Upcoming.push(activity);
     }

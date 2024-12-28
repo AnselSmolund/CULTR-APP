@@ -1,13 +1,10 @@
-import { EventCard } from "@/components/EventCard";
-import { useEventContext } from "@/components/EventContext";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { useSearchParams } from "expo-router/build/hooks";
 import { Image, StyleSheet, Platform, View, Text } from "react-native";
 
-export default function HomeScreen() {
-  const { joinedEvents } = useEventContext();
-
+export default function EventDetails() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
@@ -21,13 +18,7 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Your Events</ThemedText>
-      </ThemedView>
-
-      <ThemedView>
-        {joinedEvents.map((event, i) => {
-          return <EventCard event={event} key={i} alreadyJoined={true} />;
-        })}
+        <ThemedText type="title">More Details</ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
