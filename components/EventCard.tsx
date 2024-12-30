@@ -95,7 +95,7 @@ export const ProfileEventCard: React.FC<{
     <TouchableOpacity
       onPress={() =>
         router.push({
-          pathname: "/(tabs)/explore/event",
+          pathname: "/(tabs)/profile/event",
           params: { id: event.id, name: event.title },
         })
       }

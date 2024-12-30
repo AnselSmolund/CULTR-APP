@@ -23,6 +23,13 @@ export default function ProfileLayout() {
           title: "Profile",
         }}
       />
+      <Stack.Screen
+        name="event"
+        options={{
+          title: "Event Details",
+          headerShown: true,
+        }}
+      />
     </Stack>
   );
 }

@@ -6,6 +6,7 @@ import React, {
   useContext,
   ReactNode,
   useCallback,
+  useEffect,
 } from "react";
 
 import {
@@ -42,6 +43,7 @@ export const EventProvider: React.FC<Props> = ({ children }) => {
   };
 
   const fetchEvents = useCallback(async () => {
+    console.log("fetching");
     try {
       const events = await fetchEventsFromFirestore();
       setAllEvents(events);
@@ -51,6 +53,10 @@ export const EventProvider: React.FC<Props> = ({ children }) => {
       console.error("Error fetching events:", error);
     }
   }, []);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   const addEvent = async (event: any) => {
     try {
