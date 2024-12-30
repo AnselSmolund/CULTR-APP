@@ -1,4 +1,4 @@
-import { StyleSheet, Image, View } from "react-native";
+import { StyleSheet, Image, View, ActivityIndicator } from "react-native";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
@@ -8,12 +8,51 @@ import { AllEvents, EventType } from "@/constants/Data";
 import { useEventContext } from "@/components/EventContext";
 import { isPast, isToday, isTomorrow } from "date-fns";
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 
+interface GroupedEvents {
+  Past: EventType[];
+  Today: EventType[];
+  Tomorrow: EventType[];
+  Upcoming: EventType[];
+}
 export default function ExploreScreen() {
-  const { joinedEvents } = useEventContext();
+  const { fetchEvents, joinedEvents } = useEventContext();
+  const [visibleEvents, setVisibleEvents] = useState<GroupedEvents | undefined>(
+    undefined
+  );
 
-  const { Today, Tomorrow, Upcoming, Past } = groupActivitiesByDate(AllEvents);
   const router = useRouter();
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      setLoading(true);
+      try {
+        await fetchEvents().then((data) => {
+          if (data) {
+            const groupedEvents = groupActivitiesByDate(data);
+            setVisibleEvents(groupedEvents);
+          }
+        });
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadEvents();
+  }, [fetchEvents]);
+
+  if (loading || !visibleEvents) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
 
   return (
     <ParallaxScrollView
@@ -26,62 +65,33 @@ export default function ExploreScreen() {
           />
         </View>
       }
-      headerHeight={100}
     >
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Events Near You</ThemedText>
       </ThemedView>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          flexBasis: "auto",
-          flexWrap: "wrap",
-          gap: 10,
-        }}
-      >
-        <ThemedText type="subtitle">Past</ThemedText>
-        {Past.map((event, i) => {
-          return (
-            <EventCard
-              event={event}
-              key={i}
-              alreadyJoined={joinedEvents.includes(event)}
-            />
-          );
-        })}
-        <ThemedText type="subtitle">Today</ThemedText>
-        {Today.map((event, i) => {
-          return (
-            <EventCard
-              event={event}
-              key={i}
-              alreadyJoined={joinedEvents.includes(event)}
-            />
-          );
-        })}
-
-        <ThemedText type="subtitle">Tomorrow</ThemedText>
-        {Tomorrow.map((event, i) => {
-          return (
-            <EventCard
-              event={event}
-              key={i}
-              alreadyJoined={joinedEvents.includes(event)}
-            />
-          );
-        })}
-        <ThemedText type="subtitle">Upcoming</ThemedText>
-        {Upcoming.map((event, i) => {
-          return (
-            <EventCard
-              event={event}
-              key={i}
-              alreadyJoined={joinedEvents.includes(event)}
-            />
-          );
-        })}
-      </View>
+      {Object.entries(visibleEvents).map(([group, events], i) => {
+        return (
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              flexBasis: "auto",
+              flexWrap: "wrap",
+              gap: 10,
+            }}
+            key={i}
+          >
+            <ThemedText type="subtitle">{group}</ThemedText>
+            {events.map((event: EventType, i: number) => (
+              <EventCard
+                event={event}
+                key={`${group}-${i}`} // Use a unique key based on group and index
+                alreadyJoined={joinedEvents.includes(event)}
+              />
+            ))}
+          </View>
+        );
+      })}
     </ParallaxScrollView>
   );
 }
