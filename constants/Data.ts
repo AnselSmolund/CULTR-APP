@@ -33,10 +33,33 @@ export interface EventType {
     difficulty: "Beginner" | "Intermediate" | "Advanced";
   };
   coverImage?: any;
-  organizer: OrganizerType;
   tags: string[];
 }
 
+export const FakeEvent = [
+  {
+    id: "10",
+    clubDetails: {
+      id: "123",
+      name: "Team Best Cycling Club",
+    },
+    title: "Saturday Ride",
+    date: "2024-12-31T17:15",
+    time: "05:15 PM",
+    location: "Best Pizza & Brew",
+    avgAge: 28,
+    activityDetails: {
+      type: "Cycling",
+      terrain: "Road",
+      distance: 27,
+      elevation: 1790,
+      icon: "bicycle",
+      difficulty: "Advanced",
+    },
+
+    tags: ["A", "ROAD", "27 MI", "1790 FT"],
+  },
+];
 export const AllEvents: EventType[] = [
   {
     id: "1",
@@ -57,11 +80,7 @@ export const AllEvents: EventType[] = [
       icon: "bicycle",
       difficulty: "Advanced",
     },
-    coverImage: require("@/assets/images/best.png"),
-    organizer: {
-      name: "Tadej Pogecar",
-      avatar: require("@/assets/images/tadej-headshot.png"),
-    },
+
     tags: ["A", "ROAD", "27 MI", "1790 FT"],
   },
   {
@@ -82,11 +101,6 @@ export const AllEvents: EventType[] = [
       elevation: 2303,
       icon: "bicycle",
       difficulty: "Intermediate",
-    },
-    coverImage: require("@/assets/images/best.png"),
-    organizer: {
-      name: "Tadej Pogecar",
-      avatar: require("@/assets/images/tadej-headshot.png"),
     },
     tags: ["B", "ROAD", "40 MI", "2303 FT"],
   },
@@ -109,11 +123,6 @@ export const AllEvents: EventType[] = [
       icon: "bicycle",
       difficulty: "Advanced",
     },
-    coverImage: require("@/assets/images/tadej5.jpg"),
-    organizer: {
-      name: "Tadej Pogecar",
-      avatar: require("@/assets/images/tadej-headshot.png"),
-    },
     tags: ["A", "ROAD", "101 MI", "7900 FT"],
   },
   {
@@ -135,10 +144,6 @@ export const AllEvents: EventType[] = [
       difficulty: "Beginner",
     },
     coverImage: require("@/assets/images/crc.png"),
-    organizer: {
-      name: "Tadej Pogecar",
-      avatar: require("@/assets/images/tadej-headshot.png"),
-    },
     tags: ["C", "RUN", "7 MI"],
   },
   {
@@ -158,9 +163,6 @@ export const AllEvents: EventType[] = [
       distance: 12,
       icon: "swimmer",
       difficulty: "Advanced",
-    },
-    organizer: {
-      name: "Anna White",
     },
     tags: ["A", "TRI", "12 MI"],
   },

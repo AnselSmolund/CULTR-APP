@@ -12,51 +12,6 @@ import {
 } from "react-native";
 import { useEventContext } from "./EventContext";
 
-// export const EventCard: React.FC<{
-//   event: EventType;
-//   alreadyJoined: boolean;
-// }> = ({ event, alreadyJoined }) => {
-//   const { joinEvent } = useEventContext();
-
-//   return (
-//     <View style={styles.card}>
-//       <Image source={event.coverImage} style={styles.mapImage} />
-
-//       <View style={styles.cardContent}>
-//         <View style={styles.cardHeader}>
-//           <Text style={styles.title}>{event.title}</Text>
-//           <View style={styles.organizer}>
-//             <Image source={event.organizer.avatar} style={styles.avatar} />
-//             <Text style={styles.organizerName}>{event.organizer.name}</Text>
-//           </View>
-//         </View>
-//         <Text style={styles.dateTime}>
-//           {event.date} • {event.time}
-//         </Text>
-//         <Text style={styles.location}>{event.location}</Text>
-
-//         {/* Tags */}
-//         <View style={styles.tagsContainer}>
-//           {event.tags.map((tag: any, index: number) => (
-//             <TouchableOpacity key={index} style={styles.tag}>
-//               <Text style={styles.tagText}>{tag}</Text>
-//             </TouchableOpacity>
-//           ))}
-//         </View>
-
-//         {!alreadyJoined && (
-//           <TouchableOpacity
-//             style={styles.button}
-//             onPress={() => joinEvent(event)}
-//           >
-//             <Text style={styles.buttonText}>Join</Text>
-//           </TouchableOpacity>
-//         )}
-//       </View>
-//     </View>
-//   );
-// };
-
 export const EventCard: React.FC<{
   event: EventType;
   alreadyJoined: boolean;
@@ -118,6 +73,41 @@ export const EventCard: React.FC<{
               <FontAwesome name={"bookmark-o"} size={24} color="#333" />
             )}
           </TouchableOpacity>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+export const ProfileEventCard: React.FC<{
+  event: EventType;
+}> = ({ event }) => {
+  const router = useRouter();
+  const difficultyStyle = {
+    ["Beginner"]: styles.beginnerLabel,
+    ["Intermediate"]: styles.intermediateLabel,
+    ["Advanced"]: styles.advancedLabel,
+  };
+
+  const eventDate = new Date(event.date);
+
+  return (
+    <TouchableOpacity
+      onPress={() =>
+        router.push({
+          pathname: "/(tabs)/profile/event",
+          params: { id: event.id, name: event.title },
+        })
+      }
+    >
+      <View style={styles.card}>
+        <View style={styles.detailsSection}>
+          <Text style={styles.title}>{event.clubDetails.name}</Text>
+          <Text style={styles.subtitle}>{event.title}</Text>
+          <Text style={styles.location}>📍 {event.location}</Text>
+          <Text style={styles.dateTime}>
+            {formatDate(eventDate, "ccc MM/d p")}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>

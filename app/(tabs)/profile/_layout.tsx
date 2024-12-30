@@ -8,7 +8,7 @@ import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
-export default function ExploreLayout() {
+export default function ProfileLayout() {
   const colorScheme = useColorScheme();
 
   return (
@@ -20,7 +20,7 @@ export default function ExploreLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: "Explore",
+          title: "Profile",
         }}
       />
       <Stack.Screen
